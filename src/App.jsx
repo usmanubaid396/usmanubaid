@@ -6,7 +6,7 @@ import {
   CpuIcon, Globe, TerminalSquare, Workflow, Flame, CheckCircle2,
   Layers3, Sparkles, Command, GitBranch, Eye, Maximize2, RefreshCw, 
   Compass, BoxSelect, Cpu as CpuSymbol, Play, Pause, ChevronRight,
-  Radio, CpuShare, Terminal as TerminalIcon, Cpu as Microchip, Hexagon, Network, Menu, X
+  Radio, Terminal as TerminalIcon, Cpu as Microchip, Hexagon, Network, Menu, X
 } from 'lucide-react';
 
 /* ==========================================================================
@@ -393,6 +393,7 @@ const worksData = [
   { id: 'SYS.01', title: 'Business Portfolio', type: 'Health Care Pharmaceuticals', tech: 'React / Node / PostgreSQL / Python ML', link: 'https://healthcarepk.online' },
   { id: 'SYS.02', title: 'Utility Workflow Tool', type: 'Universal Contract Maker', tech: 'Next.js / Tailwind / Vercel Edge', link: 'https://universal-contract-maker.vercel.app/' },
   { id: 'SYS.03', title: 'Individual Portfolio', type: 'Interactive 3D 60fps Web Portfolio', tech: 'React / Three.js / WebGL / Tailwind', link: '#' },
+  { id: 'SYS.04', title: 'DIFF. MDCAT', type: 'MDCAT Practice & Test Platform', tech: 'Chapter-wise MCQs / Past Papers / Timed Quizzes', link: 'https://diffmdcat.vercel.app' },
 ];
 
 const Works = () => {
@@ -428,7 +429,7 @@ const Works = () => {
   }, []);
 
   return (
-    <section ref={containerRef} id="work" className="relative h-[400vh] bg-transparent">
+    <section ref={containerRef} id="work" className="relative bg-transparent" style={{ height: `${(worksData.length + 1) * 100}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center px-4 sm:px-12 max-w-7xl mx-auto">
         
         <div className="flex flex-col sm:flex-row border border-white/20 px-6 py-5 items-start sm:items-center justify-between bg-neutral-950/90 backdrop-blur-2xl mb-8 shadow-[0_12px_40px_rgba(0,0,0,0.95)] rounded gap-3 sm:gap-0">
@@ -470,7 +471,8 @@ const Works = () => {
 
             return (
               <div 
-                key={idx} 
+                key={work.id}
+                aria-hidden={!isCurrent}
                 className="absolute w-full max-w-4xl transition-all duration-700 ease-out will-change-transform"
                 style={{ 
                   transform: transformStyle,
@@ -483,6 +485,7 @@ const Works = () => {
                 <TiltCard className="w-full">
                   <a 
                     href={work.link} 
+                    tabIndex={isCurrent ? 0 : -1}
                     target={work.link !== '#' ? "_blank" : "_self"} 
                     rel="noopener noreferrer" 
                     className="block relative bg-neutral-950/95 backdrop-blur-3xl text-white border-2 border-white/40 p-8 sm:p-14 h-80 sm:h-96 flex flex-col justify-between group hover:border-[#dc2626] hover:shadow-[0_0_60px_rgba(220,38,38,0.5)] transition-all shadow-[0_30px_70px_rgba(0,0,0,0.98)] rounded"
@@ -503,17 +506,22 @@ const Works = () => {
           })}
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mt-8">
-          {worksData.map((_, idx) => (
-            <div 
-              key={idx} 
-              className={`h-1.5 transition-all duration-500 rounded cursor-pointer ${activeIndex === idx ? 'bg-[#dc2626] shadow-[0_0_15px_#dc2626]' : 'bg-white/20 hover:bg-white/40'}`}
+        <div className="grid gap-3 mt-8" style={{ gridTemplateColumns: `repeat(${worksData.length}, minmax(0, 1fr))` }}>
+          {worksData.map((work, idx) => (
+            <button
+              key={work.id}
+              type="button"
+              aria-label={`Show ${work.title}`}
+              aria-pressed={activeIndex === idx}
+              className="group py-3 rounded cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
               onClick={() => {
                 if (!containerRef.current) return;
                 const scrollRange = containerRef.current.scrollHeight - window.innerHeight;
-                window.scrollTo({ top: (idx / worksData.length) * scrollRange + containerRef.current.offsetTop, behavior: 'smooth' });
+                window.scrollTo({ top: ((idx + 0.5) / worksData.length) * scrollRange + containerRef.current.offsetTop, behavior: 'smooth' });
               }}
-            ></div>
+            >
+              <span className={`block h-1.5 transition-all duration-500 rounded ${activeIndex === idx ? 'bg-[#dc2626] shadow-[0_0_15px_#dc2626]' : 'bg-white/20 group-hover:bg-white/40'}`} />
+            </button>
           ))}
         </div>
 
