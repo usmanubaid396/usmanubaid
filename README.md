@@ -30,7 +30,9 @@ These additions were checked against the physicslab implementation. Firebase Aut
 
 ## Portfolio interactions
 
-The DIFF. MDCAT project uses the same work-card renderer as the other projects. The skills cards reuse the existing hover-tilt component, glass panels, red/blue accents, and typography. Ecosystem navigation and scroll height scale with the module count.
+The DIFF. MDCAT project uses the same work-card renderer as the other projects. The skills cards reuse the existing hover-tilt component, glass panels, red/blue accents, and typography. Ecosystem navigation and scroll height scale with the module count on desktop.
+
+Phones and touch devices use ordinary-flow project cards, expandable capability panels, static skill badges, and a readable lifecycle list. Safe-area spacing, 44px navigation targets, and 16px form inputs support mobile use. The lightweight mobile WebGL scene uses 150 particles, 8 shards, a pixel ratio capped at 1, and a 24fps render budget; it pauses past the hero and while the tab is hidden. Reduced-motion users receive a static background. Three.js loads separately from the main interface, and GPU resources are disposed when the scene unmounts.
 
 ## Run locally
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import * as THREE from 'three';
 import { 
   Code, Cpu, Terminal, Zap, Activity, Server, ArrowUpRight, 
   Database, Crosshair, Mail, Phone, MapPin, Box, Layers, Shield, 
@@ -9,263 +8,29 @@ import {
   Radio, Terminal as TerminalIcon, Cpu as Microchip, Hexagon, Network, Menu, X
 } from 'lucide-react';
 
-/* ==========================================================================
-   ADVANCED 60FPS WEBGL & THREE.JS SPATIAL ENGINE (SAFARI & MOBILE OPTIMIZED)
-   ================================================================---------- */
-const WebGLEngine = () => {
-  const mountRef = useRef(null);
+const WebGLEngine = React.lazy(() => import('./WebGLEngine'));
+const COMPACT_QUERY = '(max-width: 1023px), (pointer: coarse), (prefers-reduced-motion: reduce)';
 
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(() => typeof window !== 'undefined' && window.matchMedia(query).matches);
   useEffect(() => {
-    const container = mountRef.current;
-    if (!container) return;
-
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x000000, 0.007);
-    
-    const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
-    camera.position.z = 40;
-    
-    const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
-      antialias: true, 
-      powerPreference: "high-performance",
-      failIfMajorPerformanceCaveat: false
-    });
-    renderer.setSize(w, h);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    container.appendChild(renderer.domElement);
-
-    const ambientLight = new THREE.AmbientLight(0x222222, 3.0);
-    scene.add(ambientLight);
-
-    const pointLight1 = new THREE.PointLight(0xdc2626, 12, 250);
-    pointLight1.position.set(30, 30, 40);
-    scene.add(pointLight1);
-
-    const pointLight2 = new THREE.PointLight(0x3b82f6, 10, 250);
-    pointLight2.position.set(-30, -30, 30);
-    scene.add(pointLight2);
-
-    const coreGroup = new THREE.Group();
-    const coreGeo = new THREE.IcosahedronGeometry(8.5, 2);
-    
-    const coreMat = new THREE.MeshStandardMaterial({ 
-      color: 0x050505, 
-      roughness: 0.1, 
-      metalness: 0.99,
-      side: THREE.DoubleSide
-    });
-    const coreMeshSolid = new THREE.Mesh(coreGeo, coreMat);
-    
-    const wireMat = new THREE.MeshBasicMaterial({ color: 0xdc2626, wireframe: true, transparent: true, opacity: 0.95 });
-    const coreMeshWire = new THREE.Mesh(coreGeo, wireMat);
-
-    const innerGeo = new THREE.IcosahedronGeometry(5, 1);
-    const innerMat = new THREE.MeshBasicMaterial({ color: 0x3b82f6, wireframe: true, transparent: true, opacity: 0.8 });
-    const innerMesh = new THREE.Mesh(innerGeo, innerMat);
-
-    const ringGeo1 = new THREE.TorusGeometry(13, 0.05, 16, 100);
-    const ringMat1 = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
-    const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
-    ring1.rotation.x = Math.PI / 3;
-
-    const ringGeo2 = new THREE.TorusGeometry(16, 0.035, 16, 100);
-    const ring2 = new THREE.Mesh(ringGeo2, ringMat1);
-    ring2.rotation.y = Math.PI / 4;
-
-    const hitBoxGeo = new THREE.SphereGeometry(12, 16, 16);
-    const hitBoxMat = new THREE.MeshBasicMaterial({ visible: false });
-    const coreHitBox = new THREE.Mesh(hitBoxGeo, hitBoxMat);
-
-    coreGroup.add(coreMeshSolid);
-    coreGroup.add(coreMeshWire);
-    coreGroup.add(innerMesh);
-    coreGroup.add(ring1);
-    coreGroup.add(ring2);
-    coreGroup.add(coreHitBox);
-    scene.add(coreGroup);
-
-    const shardsGroup = new THREE.Group();
-    const shardGeo = new THREE.TetrahedronGeometry(1.0, 0);
-    const shardMat = new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.15, metalness: 0.9, side: THREE.DoubleSide });
-    const shards = [];
-    
-    const shardLimit = window.innerWidth < 768 ? 25 : 60;
-    for(let i = 0; i < shardLimit; i++) {
-      const shard = new THREE.Mesh(shardGeo, shardMat);
-      shard.position.set((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 80);
-      shard.userData = {
-        rotSpeedX: (Math.random() - 0.5) * 0.08,
-        rotSpeedY: (Math.random() - 0.5) * 0.08,
-        originX: shard.position.x,
-        originY: shard.position.y,
-        originZ: shard.position.z,
-        phase: Math.random() * Math.PI * 2
-      };
-      shards.push(shard);
-      shardsGroup.add(shard);
-    }
-    scene.add(shardsGroup);
-
-    const particleCount = window.innerWidth < 768 ? 1200 : 3500;
-    const particleGeo = new THREE.BufferGeometry();
-    const particlePos = new Float32Array(particleCount * 3);
-    const particleOriginalPos = new Float32Array(particleCount * 3);
-    
-    for(let i = 0; i < particleCount * 3; i += 3) {
-      const r = 15 + Math.random() * 70;
-      const theta = 2 * Math.PI * Math.random();
-      const phi = Math.acos(2 * Math.random() - 1);
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
-      particlePos[i] = x; particlePos[i+1] = y; particlePos[i+2] = z;
-      particleOriginalPos[i] = x; particleOriginalPos[i+1] = y; particleOriginalPos[i+2] = z;
-    }
-    
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-    const particleMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.18, transparent: true, opacity: 0.9 });
-    const particles = new THREE.Points(particleGeo, particleMat);
-    scene.add(particles);
-
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2(-999, -999);
-    const targetMouse = new THREE.Vector3(0,0,0);
-    const planeGeo = new THREE.PlaneGeometry(1000, 1000);
-    const planeMat = new THREE.MeshBasicMaterial({ visible: false });
-    const interactionPlane = new THREE.Mesh(planeGeo, planeMat);
-    scene.add(interactionPlane);
-
-    let isCoreHovered = false;
-    
-    const handleMove = (clientX, clientY) => {
-      mouse.x = (clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const planeIntersects = raycaster.intersectObject(interactionPlane);
-      if (planeIntersects.length > 0) targetMouse.copy(planeIntersects[0].point);
-      const coreIntersects = raycaster.intersectObject(coreHitBox);
-      isCoreHovered = coreIntersects.length > 0;
-    };
-
-    const onMouseMove = (e) => handleMove(e.clientX, e.clientY);
-    const onTouchMove = (e) => {
-      if (e.touches.length > 0) {
-        handleMove(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    };
-
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-
-    let targetScroll = 0;
-    let currentScroll = 0;
-    const onScroll = () => { targetScroll = window.scrollY; };
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    let rafId;
-    const clock = new THREE.Clock();
-    const coreTargetScale = new THREE.Vector3(1, 1, 1);
-
-    const animate = () => {
-      rafId = requestAnimationFrame(animate);
-      const time = clock.getElapsedTime();
-      currentScroll += (targetScroll - currentScroll) * 0.05;
-      
-      const targetCoreScale = isCoreHovered ? 1.5 : 1.0;
-      const pulse = Math.sin(time * 5) * 0.09;
-      coreTargetScale.setScalar(targetCoreScale + pulse);
-      coreGroup.scale.lerp(coreTargetScale, 0.12);
-      
-      coreGroup.rotation.y = time * 0.3 + (currentScroll * 0.0015);
-      coreGroup.rotation.x = Math.sin(time * 0.2) * 0.2 + (currentScroll * 0.001);
-      innerMesh.rotation.x = -time * 0.5;
-      ring1.rotation.z = time * 0.3;
-      ring2.rotation.y = -time * 0.25;
-      
-      const camTargetX = (mouse.x * 12);
-      const camTargetY = (-(currentScroll * 0.015) + (mouse.y * 12));
-      const camTargetZ = 40 - (currentScroll * 0.025);
-      
-      camera.position.x += (camTargetX - camera.position.x) * 0.06;
-      camera.position.y += (camTargetY - camera.position.y) * 0.06;
-      camera.position.z += (camTargetZ - camera.position.z) * 0.06;
-      camera.lookAt(0, 0, 0);
-
-      shards.forEach((shard) => {
-        shard.rotation.x += shard.userData.rotSpeedX;
-        shard.rotation.y += shard.userData.rotSpeedY;
-        shard.position.y = shard.userData.originY + Math.sin(time * 3 + shard.userData.phase) * 3.2;
-        const distToMouse = shard.position.distanceTo(targetMouse);
-        if(distToMouse < 28) {
-          const dir = shard.position.clone().sub(targetMouse).normalize();
-          shard.position.add(dir.multiplyScalar(0.45));
-        } else {
-          shard.position.x += (shard.userData.originX - shard.position.x) * 0.08;
-          shard.position.z += (shard.userData.originZ - shard.position.z) * 0.08;
-        }
-      });
-
-      const positions = particleGeo.attributes.position.array;
-      for(let i = 0; i < positions.length; i += 3) {
-        const px = positions[i];
-        const py = positions[i+1];
-        const pz = positions[i+2];
-        const dx = px - targetMouse.x;
-        const dy = py - targetMouse.y;
-        const dz = pz - targetMouse.z;
-        const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-
-        if(dist < 22) {
-          const force = (22 - dist) * 0.22;
-          positions[i] += (dx / dist) * force;
-          positions[i+1] += (dy / dist) * force;
-          positions[i+2] += (dz / dist) * force;
-        }
-        positions[i] += (particleOriginalPos[i] - positions[i]) * 0.09;
-        positions[i+1] += (particleOriginalPos[i+1] - positions[i+1]) * 0.09;
-        positions[i+2] += (particleOriginalPos[i+2] - positions[i+2]) * 0.09;
-      }
-      particleGeo.attributes.position.needsUpdate = true;
-      particles.rotation.y = time * 0.05;
-
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    const onResize = () => {
-      if (!container) return;
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener('resize', onResize);
-
-    return () => {
-      window.removeEventListener('resize', onResize);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('scroll', onScroll);
-      cancelAnimationFrame(rafId);
-      renderer.dispose();
-      if (container) container.innerHTML = '';
-    };
-  }, []);
-
-  return <div ref={mountRef} className="fixed inset-0 z-0 bg-black pointer-events-none" style={{ WebkitTransform: 'translateZ(0)' }} />;
-};
+    const media = window.matchMedia(query);
+    const update = () => setMatches(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, [query]);
+  return matches;
+}
 
 /* ==========================================================================
    UI COMPONENTS & MICROINTERACTIONS
    ================================================================---------- */
 const TiltCard = ({ children, className }) => {
   const cardRef = useRef(null);
+  const compact = useMediaQuery(COMPACT_QUERY);
   const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
+    if (compact || !cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -277,14 +42,14 @@ const TiltCard = ({ children, className }) => {
     if (cardRef.current) cardRef.current.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
   };
   return (
-    <div ref={cardRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className={`transition-transform duration-150 ease-out transform-gpu ${className}`}>
+    <div ref={cardRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className={`${compact ? "" : "transition-transform duration-150 ease-out transform-gpu"} ${className}`}>
       {children}
     </div>
   );
 };
 
 const SystemStatus = () => (
-  <div className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/15 text-[9px] sm:text-xs uppercase flex justify-between items-center px-3 sm:px-4 py-2 sm:py-3 font-light tracking-widest text-neutral-200 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+  <div className="system-status fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/15 text-[9px] sm:text-xs uppercase flex justify-between items-center px-3 sm:px-4 py-2 sm:py-3 font-light tracking-widest text-neutral-200 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
     <div className="flex items-center gap-2 text-white font-bold truncate">
       <div className="w-2 h-2 bg-[#dc2626] rounded-full animate-pulse shadow-[0_0_15px_#dc2626] shrink-0"></div>
       <span className="truncate">USMAN_UBAID // FULL STACK DEVELOPER</span>
@@ -297,7 +62,7 @@ const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="relative z-40 mt-10 sm:mt-12 w-full px-4 sm:px-8 py-5 sm:py-6 flex justify-between items-center border-b border-white/15 bg-neutral-950/90 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+    <nav className="portfolio-navigation relative z-40 mt-10 sm:mt-12 w-full px-4 sm:px-8 py-5 sm:py-6 flex justify-between items-center border-b border-white/15 bg-neutral-950/90 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
       <div>
         <h1 className="text-xl sm:text-2xl font-bold tracking-tighter text-white flex items-center gap-2 drop-shadow-md">
           Usman Ubaid <span className="text-[#dc2626]">.</span>
@@ -319,13 +84,15 @@ const Navigation = () => {
       <button 
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
         className="lg:hidden text-white p-2 border border-white/20 bg-white/[0.05] backdrop-blur-md"
-        aria-label="Toggle menu"
+        aria-label={mobileMenuOpen ? "Close navigation" : "Open navigation"}
+        aria-expanded={mobileMenuOpen}
+        aria-controls="mobile-navigation"
       >
         {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
       {mobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-3xl border-b border-white/20 p-6 flex flex-col gap-4 lg:hidden shadow-2xl">
+        <div id="mobile-navigation" className="absolute top-full left-0 w-full bg-black/95 backdrop-blur-3xl border-b border-white/20 p-6 flex flex-col gap-4 lg:hidden shadow-2xl">
           {['Work', 'Skills', 'Ecosystem', 'Scrollytelling', 'Contact'].map((item, idx) => (
             <a 
               key={idx} 
@@ -350,7 +117,7 @@ const Navigation = () => {
 };
 
 const Hero = () => (
-  <section id="index" className="relative z-10 w-full px-4 sm:px-8 pt-20 sm:pt-24 pb-24 sm:pb-32 border-b border-white/15 bg-transparent">
+  <section id="index" className="portfolio-hero relative z-10 w-full px-4 sm:px-8 pt-20 sm:pt-24 pb-24 sm:pb-32 border-b border-white/15 bg-transparent">
     <div className="max-w-6xl">
       <p className="text-[#dc2626] text-xs sm:text-sm tracking-[0.3em] mb-6 sm:mb-8 font-bold flex items-center gap-2 bg-neutral-950/80 backdrop-blur-xl w-fit px-3 sm:px-4 py-1.5 border border-white/20 shadow-xl">
         <Crosshair size={16} className="shrink-0" /> <span className="truncate">FULL-STACK SaaS & 3D IMMERSIVE ARCHITECTURE</span>
@@ -397,10 +164,12 @@ const worksData = [
 ];
 
 const Works = () => {
+  const compact = useMediaQuery(COMPACT_QUERY);
   const containerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
+    if (compact) return;
     let animationFrameId = null;
 
     const handleScroll = () => {
@@ -426,7 +195,24 @@ const Works = () => {
       window.removeEventListener('scroll', handleScroll);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [compact]);
+
+  if (compact) return (
+    <section id="work" className="mobile-section">
+      <p className="mobile-eyebrow">// SELECTED PRODUCTION WORK</p>
+      <h3 className="mobile-heading">Built & shipped.</h3>
+      <div className="grid gap-4">
+        {worksData.map(work => (
+          <a key={work.id} href={work.link} target={work.link === "#" ? "_self" : "_blank"} rel="noopener noreferrer" className="mobile-project">
+            <div className="flex items-center justify-between mb-8"><span className="text-xs text-neutral-400">{work.id}</span><ArrowUpRight size={24} className="text-[#dc2626]" /></div>
+            <h4 className="text-3xl font-black tracking-tight mb-3">{work.title}</h4>
+            <p className="text-sm text-white mb-3">{work.type}</p>
+            <p className="text-xs leading-relaxed text-neutral-400">{work.tech}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
 
   return (
     <section ref={containerRef} id="work" className="relative bg-transparent" style={{ height: `${(worksData.length + 1) * 100}vh` }}>
@@ -534,6 +320,7 @@ const Works = () => {
    SKILLS SECTION — HORIZONTAL RUNNING TICKER
    ================================================================---------- */
 const SkillsTicker = () => {
+  const compact = useMediaQuery(COMPACT_QUERY);
   const skills = [
     'React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 
     'Three.js', 'Node.js', 'Python', 'PostgreSQL', 'REST APIs', 'WebGL', 'Vercel',
@@ -562,8 +349,8 @@ const SkillsTicker = () => {
       </div>
 
       <div className="relative w-full overflow-hidden py-4 bg-neutral-950/80 border-y border-white/20 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
-        <div className="flex w-max animate-marquee gap-6">
-          {tickerContent.map((skill, idx) => (
+        <div className={compact ? "flex flex-wrap gap-2 px-4" : "flex w-max animate-marquee gap-6"}>
+          {(compact ? skills : tickerContent).map((skill, idx) => (
             <div 
               key={idx}
               className="flex items-center gap-3 px-6 py-3.5 bg-black/80 backdrop-blur-xl border border-white/20 text-white font-mono text-xs sm:text-sm font-bold uppercase tracking-widest shadow-lg shrink-0 hover:border-[#dc2626] transition-colors"
@@ -609,6 +396,7 @@ const SkillsTicker = () => {
 };
 
 const RadialOrbitalScrollytelling = () => {
+  const compact = useMediaQuery(COMPACT_QUERY);
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef(null);
 
@@ -623,6 +411,7 @@ const RadialOrbitalScrollytelling = () => {
   ];
 
   useEffect(() => {
+    if (compact) return;
     let animationFrameId = null;
 
     const handleScroll = () => {
@@ -648,7 +437,22 @@ const RadialOrbitalScrollytelling = () => {
       window.removeEventListener('scroll', handleScroll);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
-  }, [modules.length]);
+  }, [compact, modules.length]);
+
+  if (compact) return (
+    <section id="ecosystem" className="mobile-section">
+      <p className="mobile-eyebrow">// SYSTEMS & CAPABILITIES</p>
+      <h3 className="mobile-heading">Inside the stack.</h3>
+      <div className="grid gap-3">
+        {modules.map(m => (
+          <details key={m.id} className="mobile-capability" open={m.id === "NODE_05"}>
+            <summary className="flex items-center gap-3 cursor-pointer p-5"><m.icon size={22} style={{color: m.color}} className="shrink-0" /><span className="text-sm font-bold flex-1">{m.title}</span><ChevronRight size={18} className="detail-chevron shrink-0" /></summary>
+            <div className="px-5 pb-5"><p className="text-sm text-neutral-300 leading-relaxed">{m.desc}</p><p className="text-xs text-[#3b82f6] mt-4">{m.stats}</p></div>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
 
   return (
     <section ref={containerRef} id="ecosystem" className="relative bg-transparent" style={{ height: `${(modules.length * 1.25 + 1) * 100}vh` }}>
@@ -723,6 +527,7 @@ const RadialOrbitalScrollytelling = () => {
 };
 
 const ScrollytellingSection = () => {
+  const compact = useMediaQuery(COMPACT_QUERY);
   const [activeStep, setActiveStep] = useState(0);
   const containerRef = useRef(null);
 
@@ -734,6 +539,7 @@ const ScrollytellingSection = () => {
   ];
 
   useEffect(() => {
+    if (compact) return;
     let animationFrameId = null;
 
     const handleScroll = () => {
@@ -759,7 +565,19 @@ const ScrollytellingSection = () => {
       window.removeEventListener('scroll', handleScroll);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
-  }, [milestones.length]);
+  }, [compact, milestones.length]);
+
+  if (compact) return (
+    <section id="scrollytelling" className="mobile-section">
+      <p className="mobile-eyebrow">// DEVELOPMENT LIFECYCLE</p>
+      <h3 className="mobile-heading">From idea to launch.</h3>
+      <ol className="grid gap-4">
+        {milestones.map((m, idx) => (
+          <li key={m.phase} className="mobile-phase"><span className="text-[#dc2626] text-xs font-bold">0{idx + 1} / {m.phase.split(" // ")[1]}</span><h4 className="text-xl font-bold mt-3 mb-3">{m.title}</h4><p className="text-sm text-neutral-300 leading-relaxed">{m.desc}</p></li>
+        ))}
+      </ol>
+    </section>
+  );
 
   return (
     <section ref={containerRef} id="scrollytelling" className="relative h-[600vh] bg-transparent border-b border-white/10">
@@ -792,7 +610,7 @@ const ScrollytellingSection = () => {
 };
 
 const Footer = () => (
-  <footer id="contact" className="relative z-10 w-full bg-transparent">
+  <footer id="contact" className="portfolio-footer relative z-10 w-full bg-transparent">
     <div className="px-4 sm:px-8 py-24 border-b border-white/10 grid grid-cols-1 lg:grid-cols-2 gap-16 bg-black/50 backdrop-blur-md">
       <div>
         <h2 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase text-white drop-shadow">Let's build<br/>something great.</h2>
@@ -814,15 +632,18 @@ const Footer = () => (
     </div>
     <div className="px-4 sm:px-8 py-6 text-[10px] text-neutral-400 tracking-widest uppercase font-bold flex justify-between bg-black/80 backdrop-blur-md border-t border-white/10">
       <div>&copy; {new Date().getFullYear()} USMAN UBAID // ALL RIGHTS RESERVED.</div>
-      <div>60FPS_TRANSPARENT_KERNEL_ACTIVE</div>
+      <div>{/* Adaptive rendering avoids promising a fixed frame rate. */}ADAPTIVE_3D_KERNEL</div>
     </div>
   </footer>
 );
 
 export default function App() {
+  const compact = useMediaQuery(COMPACT_QUERY);
+  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   return (
     <div className="min-h-screen relative font-mono text-white bg-black">
-      <WebGLEngine />
+      <div aria-hidden="true" className="ambient-background" />
+      {!reducedMotion && <React.Suspense fallback={null}><WebGLEngine compact={compact} /></React.Suspense>}
       <SystemStatus />
       <main className="relative z-10 pt-12">
         <Navigation />
