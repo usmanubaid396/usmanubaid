@@ -302,7 +302,7 @@ const Navigation = () => {
         <h1 className="text-xl sm:text-2xl font-bold tracking-tighter text-white flex items-center gap-2 drop-shadow-md">
           Usman Ubaid <span className="text-[#dc2626]">.</span>
         </h1>
-        <p className="text-[10px] sm:text-xs text-neutral-300 tracking-widest mt-0.5 uppercase hidden sm:block">Full-Stack SaaS Architect & 3D Interactive Systems</p>
+        <p className="text-[10px] sm:text-xs text-neutral-300 tracking-widest mt-0.5 uppercase hidden sm:block">Full-Stack SaaS, LMS & 3D Interactive Systems</p>
       </div>
 
       <div className="hidden lg:flex gap-6 text-xs font-bold tracking-[0.2em] uppercase items-center">
@@ -359,7 +359,7 @@ const Hero = () => (
         I build high-end <br /><span className="stroke-text">SaaS products</span> & web apps that scale.
       </h2>
       <p className="mt-6 sm:mt-8 text-xs sm:text-lg text-neutral-200 max-w-2xl font-light tracking-wide leading-relaxed bg-neutral-950/80 p-6 sm:p-8 border border-white/15 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
-        I'm Usman Ubaid — a full-stack web engineer turning complex startup ideas, architectures, and AI/ML model integrations into production-ready web platforms using Next.js, React, SQL, Python, and Vercel.
+        I'm Usman Ubaid — a full-stack web engineer building SaaS products, learning platforms, and interactive web experiences. My DIFF. MDCAT LMS brings together React, TypeScript, Firebase authentication, Firestore data, student analytics, and protected test sessions, alongside my work with SQL, Python, Next.js, and Vercel.
       </p>
 
       <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl">
@@ -372,8 +372,8 @@ const Hero = () => (
           <div className="text-[10px] sm:text-xs text-neutral-300 uppercase tracking-widest font-bold">SaaS & Web Apps Launched</div>
         </div>
         <div className="border border-white/15 bg-neutral-950/80 p-5 sm:p-6 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
-          <div className="text-3xl sm:text-5xl font-black text-[#3b82f6] mb-1 drop-shadow">14+</div>
-          <div className="text-[10px] sm:text-xs text-neutral-300 uppercase tracking-widest font-bold">Advanced Technologies</div>
+          <div className="text-3xl sm:text-5xl font-black text-[#3b82f6] mb-1 drop-shadow">LMS</div>
+          <div className="text-[10px] sm:text-xs text-neutral-300 uppercase tracking-widest font-bold">Auth / Data / Assessment</div>
         </div>
       </div>
       
@@ -393,7 +393,7 @@ const worksData = [
   { id: 'SYS.01', title: 'Business Portfolio', type: 'Health Care Pharmaceuticals', tech: 'React / Node / PostgreSQL / Python ML', link: 'https://healthcarepk.online' },
   { id: 'SYS.02', title: 'Utility Workflow Tool', type: 'Universal Contract Maker', tech: 'Next.js / Tailwind / Vercel Edge', link: 'https://universal-contract-maker.vercel.app/' },
   { id: 'SYS.03', title: 'Individual Portfolio', type: 'Interactive 3D 60fps Web Portfolio', tech: 'React / Three.js / WebGL / Tailwind', link: '#' },
-  { id: 'SYS.04', title: 'DIFF. MDCAT', type: 'MDCAT Practice & Test Platform', tech: 'Chapter-wise MCQs / Past Papers / Timed Quizzes', link: 'https://diffmdcat.vercel.app' },
+  { id: 'SYS.04', title: 'DIFF. MDCAT', type: 'Full-Stack Learning Management System', tech: 'React / TypeScript / Firebase Auth / Firestore', link: 'https://diffmdcat.vercel.app' },
 ];
 
 const Works = () => {
@@ -536,7 +536,20 @@ const Works = () => {
 const SkillsTicker = () => {
   const skills = [
     'React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 
-    'Three.js', 'Node.js', 'Python', 'PostgreSQL', 'REST APIs', 'WebGL', 'Vercel'
+    'Three.js', 'Node.js', 'Python', 'PostgreSQL', 'REST APIs', 'WebGL', 'Vercel',
+    'TanStack Start', 'TanStack Router', 'TanStack Query', 'Firebase Auth',
+    'Cloud Firestore', 'Firebase Admin SDK', 'Firestore Rules', 'Zustand',
+    'Zod', 'React Hook Form', 'Radix UI', 'KaTeX', 'jsPDF', 'Playwright',
+    'Better Auth', 'Kysely', 'PGLite', 'SQL Migrations'
+  ];
+
+  const lmsSkills = [
+    { title: 'Authentication & Access', icon: Shield, detail: 'Google and email/password sign-in, password recovery, server-side ID token verification, and student, mentor, and administrator access checks.' },
+    { title: 'Databases & Live Data', icon: Database, detail: 'Firestore profiles, quiz progress, snapshot subscriptions, live rankings, and security rules. PostgreSQL integration, SQL migrations, and a PGLite preview fallback.' },
+    { title: 'Learning & Assessment', icon: Activity, detail: 'Chapter-wise question banks, past papers, timed quizzes, explanations, attempt history, progress analytics, and protected test-session workflows.' },
+    { title: 'Admin & Content Tools', icon: Workflow, detail: 'Admin and mentor dashboards, student enrollment, session access and expiry, test management, and validated TXT, JSON, and CSV question-import workflows.' },
+    { title: 'Interfaces & Study Exports', icon: Layers, detail: 'Responsive React and TypeScript interfaces with TanStack, Tailwind, Radix UI, Zustand, and Zod. KaTeX formula rendering and jsPDF/html2canvas quiz-review exports.' },
+    { title: 'Delivery & Verification', icon: CheckCircle2, detail: 'Vite builds and Vercel deployment, chapter-manifest and SEO scripts, Python question-bank imports, Node tests, Playwright flows, and Firestore emulator permission tests.' },
   ];
 
   const tickerContent = [...skills, ...skills, ...skills];
@@ -562,6 +575,21 @@ const SkillsTicker = () => {
         </div>
       </div>
 
+      <div className="max-w-6xl mx-auto px-4 sm:px-8 mt-10 sm:mt-14">
+        <p className="text-[#3b82f6] text-xs font-bold tracking-[0.2em] uppercase mb-6">// BUILT THROUGH DIFF. MDCAT</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+          {lmsSkills.map((skill) => (
+            <TiltCard key={skill.title} className="h-full">
+              <article className="h-full border border-white/20 bg-neutral-950/90 backdrop-blur-2xl p-6 rounded shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-[#dc2626] transition-colors">
+                <skill.icon size={24} className="text-[#3b82f6] mb-4" aria-hidden="true" />
+                <h4 className="text-base font-black uppercase tracking-tight mb-3">{skill.title}</h4>
+                <p className="text-xs text-neutral-300 leading-relaxed">{skill.detail}</p>
+              </article>
+            </TiltCard>
+          ))}
+        </div>
+      </div>
+
       <style>{`
         @keyframes marquee {
           0% { transform: translateX(0%); }
@@ -570,7 +598,7 @@ const SkillsTicker = () => {
         .animate-marquee {
           display: flex;
           width: max-content;
-          animation: marquee 30s linear infinite;
+          animation: marquee 75s linear infinite;
         }
         .animate-marquee:hover {
           animation-play-state: paused;
@@ -586,9 +614,12 @@ const RadialOrbitalScrollytelling = () => {
 
   const modules = [
     { id: "NODE_01", title: "Frontend & Reactive UI Architecture", category: "CLIENT KERNEL", icon: Code, color: "#dc2626", desc: "Engineered with React, Next.js, and Tailwind CSS. Implements butter-smooth custom magnetic cursors, perspective tilt cards, and GPU-accelerated spatial transformations.", stats: "60 FPS Render Rate" },
-    { id: "NODE_02", title: "Secure SQL & Relational Databases", category: "BACKEND INTEGRATION", icon: Database, color: "#3b82f6", desc: "Robust PostgreSQL and MySQL schemas optimized for high-throughput multi-tenant SaaS platforms, medical record indexes, and secure authentication pipelines.", stats: "ACID Compliant Storage" },
+    { id: "NODE_02", title: "SQL Integration & Migrations", category: "BACKEND INTEGRATION", icon: Database, color: "#3b82f6", desc: "Server-only parameterized SQL, PostgreSQL connection pooling, and tracked migrations. The LMS supports a configured Neon database or PGLite preview fallback, with Better Auth and Kysely integration.", stats: "PostgreSQL / PGLite / Kysely" },
     { id: "NODE_03", title: "Python Machine Learning & AI", category: "INTELLIGENT PIPELINES", icon: Cpu, color: "#10b981", desc: "Advanced neural networks and automated contract generation systems built with Python, PyTorch, and Vercel Edge functions for real-time inference.", stats: "Real-time AI Synthesis" },
-    { id: "NODE_04", title: "Global Vercel Edge Infrastructure", category: "CLOUD DEPLOYMENT", icon: Globe, color: "#f59e0b", desc: "Low-latency serverless architecture ensuring global distribution, instant cache invalidation, and bulletproof uptime for production startup applications.", stats: "99.99% Edge Uptime" }
+    { id: "NODE_04", title: "Vercel Deployment & Build Pipelines", category: "CLOUD DEPLOYMENT", icon: Globe, color: "#f59e0b", desc: "Vercel deployment with Vite builds, generated chapter manifests, and SEO scripts. The LMS includes automated checks for question imports, authentication, and student flows.", stats: "Build / Deploy / Verify" },
+    { id: "NODE_05", title: "Firebase Auth & Access Control", category: "IDENTITY & PERMISSIONS", icon: Shield, color: "#dc2626", desc: "Google and email/password authentication, password recovery, Firebase Admin token verification, and role checks for students, mentors, and administrators in DIFF. MDCAT.", stats: "Student / Mentor / Admin" },
+    { id: "NODE_06", title: "Firestore & Student Analytics", category: "LIVE LEARNING DATA", icon: Database, color: "#3b82f6", desc: "Cloud Firestore stores profiles and progress, with snapshot subscriptions for live rankings. Ownership rules protect student records, and saved guest attempts synchronize after sign-in.", stats: "Profiles / Progress / Rankings" },
+    { id: "NODE_07", title: "LMS & Assessment Workflows", category: "EDUCATION PLATFORM", icon: Activity, color: "#10b981", desc: "Question banks, timed quizzes, explanations, protected test sessions, admin and mentor dashboards, validated MCQ imports, and downloadable quiz reviews with mathematical notation.", stats: "Practice / Assess / Review" }
   ];
 
   useEffect(() => {
@@ -620,7 +651,7 @@ const RadialOrbitalScrollytelling = () => {
   }, [modules.length]);
 
   return (
-    <section ref={containerRef} id="ecosystem" className="relative h-[600vh] bg-transparent">
+    <section ref={containerRef} id="ecosystem" className="relative bg-transparent" style={{ height: `${(modules.length * 1.25 + 1) * 100}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-between px-4 sm:px-16 py-12 sm:py-20 pointer-events-auto">
         
         <div className="flex justify-between items-center border-b border-white/15 pb-4 sm:pb-6 bg-neutral-950/90 backdrop-blur-2xl px-4 sm:px-6 rounded shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
@@ -663,7 +694,7 @@ const RadialOrbitalScrollytelling = () => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 sm:pt-6 border-t border-white/15 gap-2 sm:gap-0">
               <div className="flex items-center gap-2">
                 <Network size={16} className="text-[#3b82f6] shrink-0" />
-                <span className="text-[11px] sm:text-xs font-mono text-neutral-300 uppercase">Performance Benchmark:</span>
+                <span className="text-[11px] sm:text-xs font-mono text-neutral-300 uppercase">System Capability:</span>
               </div>
               <span className="text-[11px] sm:text-xs font-mono font-bold text-white bg-neutral-950/90 backdrop-blur-xl px-3 py-1 border border-white/20 w-fit">
                 {modules[activeIndex].stats}
@@ -672,7 +703,7 @@ const RadialOrbitalScrollytelling = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 sm:gap-4 border-t border-white/15 pt-4 sm:pt-6 bg-neutral-950/90 backdrop-blur-2xl px-4 sm:px-6 pb-3 sm:pb-4 rounded shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+        <div className="grid gap-2 sm:gap-4 border-t border-white/15 pt-4 sm:pt-6 bg-neutral-950/90 backdrop-blur-2xl px-4 sm:px-6 pb-3 sm:pb-4 rounded shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]" style={{ gridTemplateColumns: `repeat(${modules.length}, minmax(0, 1fr))` }}>
           {modules.map((m, idx) => (
             <div 
               key={idx} 
@@ -680,7 +711,7 @@ const RadialOrbitalScrollytelling = () => {
               onClick={() => {
                 if (!containerRef.current) return;
                 const scrollRange = containerRef.current.scrollHeight - window.innerHeight;
-                window.scrollTo({ top: (idx / modules.length) * scrollRange + containerRef.current.offsetTop, behavior: 'smooth' });
+                window.scrollTo({ top: ((idx + 0.5) / modules.length) * scrollRange + containerRef.current.offsetTop, behavior: 'smooth' });
               }}
             ></div>
           ))}
@@ -696,10 +727,10 @@ const ScrollytellingSection = () => {
   const containerRef = useRef(null);
 
   const milestones = [
-    { phase: "PHASE_01 // ARCHITECTING", title: "System Scoping & Database Modeling", desc: "Defining high-throughput database schemas in PostgreSQL, establishing secure REST endpoints, and designing component hierarchies." },
-    { phase: "PHASE_02 // ENGINEERING", title: "Full-Stack React & Next.js Build", desc: "Developing responsive SaaS interfaces using Tailwind CSS, implementing server actions, and configuring lightning-fast Vercel edge deployment." },
+    { phase: "PHASE_01 // ARCHITECTING", title: "Learning Flows & Data Modeling", desc: "Planning student, mentor, and admin journeys; organizing question banks; modeling Firestore records and SQL schemas; and defining access rules for private tests." },
+    { phase: "PHASE_02 // ENGINEERING", title: "Full-Stack LMS Engineering", desc: "Building React and TypeScript interfaces with TanStack and Tailwind, connecting Firebase authentication, synchronizing progress, and implementing assessment and content-management APIs." },
     { phase: "PHASE_03 // 3D KERNEL INTEGRATION", title: "WebGL Shaders & Spatial Shards", desc: "Embedding Three.js particle matrices, raycasted mouse physics, and hardware-accelerated 60FPS visual depth into user interfaces." },
-    { phase: "PHASE_04 // DEPLOYMENT & SCALE", title: "Production Launch & AI Pipelines", desc: "Connecting Python machine learning models, optimizing performance metrics, and pushing live to production environments." }
+    { phase: "PHASE_04 // DEPLOYMENT & SCALE", title: "Verification & Production Delivery", desc: "Validating question imports, testing student flows and Firestore permissions, generating SEO assets, checking production builds, and deploying through Vercel." }
   ];
 
   useEffect(() => {
@@ -765,7 +796,7 @@ const Footer = () => (
     <div className="px-4 sm:px-8 py-24 border-b border-white/10 grid grid-cols-1 lg:grid-cols-2 gap-16 bg-black/50 backdrop-blur-md">
       <div>
         <h2 className="text-5xl sm:text-7xl font-black tracking-tighter uppercase text-white drop-shadow">Let's build<br/>something great.</h2>
-        <p className="text-xs text-neutral-300 mt-6 tracking-widest uppercase font-bold">Reach out directly to discuss your SaaS or web platform.</p>
+        <p className="text-xs text-neutral-300 mt-6 tracking-widest uppercase font-bold">Reach out to discuss your SaaS, LMS, authentication, database, or interactive web platform.</p>
         <div className="mt-8 flex flex-col gap-4 text-xs font-bold tracking-widest">
           <a href="mailto:usman@healthcarepk.online" className="text-neutral-200 hover:text-[#dc2626] transition-colors">usman@healthcarepk.online</a>
           <a href="https://github.com/usmanubaid396" target="_blank" rel="noopener noreferrer" className="text-neutral-200 hover:text-[#dc2626] transition-colors">github</a>
