@@ -48,6 +48,6 @@ npm run preview
 
 ## Contact
 
-- Email: usman@healthcarepk.online
+- Email: usman@diffmdcat.com
 - [GitHub](https://github.com/usmanubaid396)
 - [LinkedIn](https://linkedin.com/in/uu51)
